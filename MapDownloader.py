@@ -160,7 +160,7 @@ class DownloadImage(threading.Thread):
                 imagename = self.imagename + "_"+str(Yindex)+"_"+str(Xindex)+".jpg"
                 #check if exists
                 if os.path.isfile(imagename):
-                    strinfo = imagename+"already exits"
+                    strinfo = imagename+"already exists"
                     print strinfo
                 else:                 
                     X = Xindex*2400
@@ -237,7 +237,7 @@ class ImageMerge(threading.Thread):
 
             #check if exists
             if os.path.isfile(self.imgname):
-                strinfo = self.imgname+"already exits"
+                strinfo = self.imgname+"already exists"
                 print strinfo
             else:                     
                 for imagepath in self.imagepaths:                
