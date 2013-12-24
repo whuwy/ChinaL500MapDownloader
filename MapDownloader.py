@@ -99,11 +99,17 @@ class Crawler(object):
                             t.join()
                         #clear thread pool
                         self.downloadthreads =[]
-                                              
+                
+                #wating for all thread done
+                for t in self.downloadthreads:
+                    t.join()
+                #clear thread pool
+                self.downloadthreads =[]
+                                                    
                 #merge
                 for key in self.mapdict:
                     time.sleep(3)
-                    imagemerge = ImageMerge(self.mapdict[key])
+                    imagemerge = ImageMerge(self.mapdict[key],self.imagequality)
                     imagemerge.start()
                     self.mergethreads.append(imagemerge)
                     
@@ -160,7 +166,7 @@ class DownloadImage(threading.Thread):
                 imagename = self.imagename + "_"+str(Yindex)+"_"+str(Xindex)+".jpg"
                 #check if exists
                 if os.path.isfile(imagename):
-                    strinfo = imagename+"already exists"
+                    strinfo = imagename+" already exits"
                     print strinfo
                 else:                 
                     X = Xindex*2400
@@ -196,10 +202,10 @@ class DownloadImage(threading.Thread):
                             socket.close()
                             jpg.close()
                             
-                            strinfo = imagename+'download successfully' 
+                            strinfo = imagename+' download successfully' 
                             print(strinfo)
                     except:
-                        strinfo = imagename+'download error' 
+                        strinfo = imagename+' download error' 
                         print(strinfo)
         self.stop()
                 
@@ -237,7 +243,7 @@ class ImageMerge(threading.Thread):
 
             #check if exists
             if os.path.isfile(self.imgname):
-                strinfo = self.imgname+"already exists"
+                strinfo = self.imgname+"already exits"
                 print strinfo
             else:                     
                 for imagepath in self.imagepaths:                
@@ -271,7 +277,7 @@ if __name__ == "__main__":
     parser.add_argument("-downloadthread", help="Set the number of download thread, default is 20",
                         type=int,default=20)
     parser.add_argument("-timeout", help="Set socket timeout by second,default is 600",
-                    type=int,default=600)  
+                    type=int,default=900)  
     parser.add_argument("-mergethread", help="Set the number of merge thread, default is 3. Warning:The map merge operation is resource-intensive,please Make sure your computer's resources sufficient",
                     type=int,default=3)
     parser.add_argument("-imagequality", help="Set the quality of merged map , value from 0 to 100,default is 80",
